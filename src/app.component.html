@@ -1,0 +1,82 @@
+<main class="shell">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">⚽</div><div><strong>MatchUp</strong><span>Friendly match generator</span></div></div>
+    <div class="live"><i></i> READY TO PLAY</div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">⚡ QUICK • FAIR • RANDOM</div>
+      <h1>Build two teams.<br><em>Keep friends apart.</em></h1>
+      <p>Pair players who should play on opposite teams, then let MatchUp create a random, balanced split.</p>
+    </div>
+    <div class="hero-ball">⚽</div>
+  </section>
+
+  <section class="grid">
+    <article class="card players-card">
+      <div class="card-head"><div><span class="step">01</span><h2>Players</h2><p>Add everyone joining the match.</p></div><span class="count">{{ players.length }}</span></div>
+      <div class="add-row">
+        <input [(ngModel)]="newPlayer" (keyup.enter)="addPlayer()" placeholder="Player name…" />
+        <button class="primary small" (click)="addPlayer()">+ Add</button>
+      </div>
+      <div class="player-list">
+        <div class="player" *ngFor="let p of players">
+          <span class="avatar">{{ p.initials }}</span><span>{{ p.name }}</span>
+          <button class="icon-btn" (click)="removePlayer(p.id)" title="Remove">×</button>
+        </div>
+        <div class="empty" *ngIf="!players.length">No players yet. Add your first player.</div>
+      </div>
+    </article>
+
+    <article class="card pairs-card">
+      <div class="card-head"><div><span class="step">02</span><h2>Keep apart</h2><p>Pair everyone. Each pair will be split across the two teams.</p></div><span class="count">{{ pairCount }} / {{ requiredPairCount }}</span></div>
+      <div class="pair-form">
+        <select [(ngModel)]="selectedA"><option [ngValue]="null">Select player</option><option *ngFor="let p of unpairedPlayers" [ngValue]="p.id">{{ p.name }}</option></select>
+        <span class="versus">VS</span>
+        <select [(ngModel)]="selectedB"><option [ngValue]="null">Select player</option><option *ngFor="let p of unpairedPlayers" [ngValue]="p.id">{{ p.name }}</option></select>
+        <button class="primary" (click)="createPair()">Pair them</button>
+      </div>
+      <div class="pairs-list">
+        <div class="pair" *ngFor="let pair of pairs">
+          <span class="avatar">{{ player(pair.a).initials }}</span><strong>{{ player(pair.a).name }}</strong>
+          <b>↔</b><span class="avatar alt">{{ player(pair.b).initials }}</span><strong>{{ player(pair.b).name }}</strong>
+          <button class="icon-btn" (click)="removePair(pair)">×</button>
+        </div>
+        <div class="pair-progress">
+        <div class="progress-label"><span>Pairing progress</span><strong>{{ pairCount }} / {{ requiredPairCount }}</strong></div>
+        <div class="progress-track"><div class="progress-fill" [style.width.%]="requiredPairCount ? (pairCount / requiredPairCount) * 100 : 0"></div></div>
+      </div>
+      <div class="empty" *ngIf="!pairs.length">Start pairing players. Every player needs exactly one partner.</div>
+      <div class="complete" *ngIf="allPlayersPaired">✓ Everyone is paired. You're ready to generate teams!</div>
+      </div>
+    </article>
+  </section>
+
+  <div class="notice" *ngIf="error">⚠ {{ error }}</div>
+
+  <section class="generate-bar">
+    <div><span class="ready-dot"></span><strong>{{ players.length }} players</strong><span>•</span><span>{{ pairCount }} restrictions</span></div>
+    <button class="generate" (click)="generate()">Generate teams <span>✦</span></button>
+  </section>
+
+  <section class="results" *ngIf="generated">
+    <div class="results-head">
+      <div><span class="eyebrow">MATCH DAY</span><h2>Your teams are ready.</h2></div>
+      <button class="secondary" (click)="generate()">↻ Regenerate</button>
+    </div>
+    <div class="teams">
+      <article class="team team-a">
+        <div class="team-title"><span class="shirt">◆</span><div><small>TEAM A</small><h3>Green Squad</h3></div><strong>{{ teamA.length }}</strong></div>
+        <div class="team-player" *ngFor="let p of teamA"><span class="avatar">{{ p.initials }}</span><span>{{ p.name }}</span><span class="tick">✓</span></div>
+      </article>
+      <div class="divider">VS</div>
+      <article class="team team-b">
+        <div class="team-title"><span class="shirt orange">◆</span><div><small>TEAM B</small><h3>Orange Squad</h3></div><strong>{{ teamB.length }}</strong></div>
+        <div class="team-player" *ngFor="let p of teamB"><span class="avatar orange">{{ p.initials }}</span><span>{{ p.name }}</span><span class="tick">✓</span></div>
+      </article>
+    </div>
+  </section>
+
+  <footer><span>MatchUp</span> • Make every friendly match more fun.</footer>
+</main>
