@@ -13,7 +13,7 @@
     <div class="hero-ball">⚽</div>
   </section>
 
-  <section class="grid">
+  <section *ngIf="!generated" class="grid">
     <article class="card players-card">
       <div class="card-head"><div><span class="step">01</span><h2>Players</h2><p>Add everyone joining the match.</p></div><span class="count">{{ players.length }}</span></div>
       <div class="add-row">
@@ -55,7 +55,7 @@
 
   <div class="notice" *ngIf="error">⚠ {{ error }}</div>
 
-  <section class="generate-bar">
+  <section *ngIf="!generated"  class="generate-bar">
     <div><span class="ready-dot"></span><strong>{{ players.length }} players</strong><span>•</span><span>{{ pairCount }} restrictions</span></div>
     <button class="generate" (click)="generate()">Generate teams <span>✦</span></button>
   </section>
