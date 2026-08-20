@@ -37,6 +37,17 @@ export class AppComponent {
     const used = new Set(this.pairs.flatMap(p => [p.a, p.b]));
     return this.players.filter(p => !used.has(p.id));
   }
+  get availablePlayersForFirstDropdown(): Player[] {
+  return this.unpairedPlayers.filter(
+    player => player.id !== this.selectedB
+  );
+}
+
+get availablePlayersForSecondDropdown(): Player[] {
+  return this.unpairedPlayers.filter(
+    player => player.id !== this.selectedA
+  );
+}
 
   addPlayer(name = this.newPlayer) {
     const clean = name.trim();
@@ -111,6 +122,7 @@ export class AppComponent {
       player => !pairedPlayerIds.has(player.id)
     );
 
+
     // 3. Randomize unpaired players
     const shuffledUnpaired = [...unpairedPlayers].sort(
       () => Math.random() - 0.5
@@ -155,7 +167,7 @@ export class AppComponent {
   resetTeams() { this.generated = false; this.teamA = []; this.teamB = []; }
 
   resetAll() {
-    this.players = []; this.pairs = []; this.resetTeams(); this.newPlayer = ''; this.error = '';
+    this.pairs = []; this.resetTeams(); this.error = '';
   }
 }
 
