@@ -88,11 +88,13 @@
     <div><span class="ready-dot"></span><strong>{{ players.length }} players</strong><span>•</span><span>{{ pairCount }}
         restrictions</span></div>
     <button *ngIf="generated" class="generate" (click)="resetAll()">Go back</button>
-    <button *ngIf="!generated" class="generate" (click)="generate()">Generate teams <span>✦</span></button>
+    <button *ngIf="!generated" class="generate" [disabled]="!canGenerate" (click)="generate()">
+      Generate teams <span>✦</span>
+    </button>
   </section>
 
   <section class="results" *ngIf="generated">
-    <div class="results-head">
+    <div class="results-head" #resultsHead>
       <div><span class="eyebrow">MATCH DAY</span>
         <h2>Your teams are ready.</h2>
       </div>
@@ -122,4 +124,21 @@
   </section>
 
   <footer><span>MatchUp</span> • Make every friendly match more fun.</footer>
+
+  <div class="generation-overlay" *ngIf="isGenerating">
+  <div class="football-loader">
+    <div class="football">⚽</div>
+
+    <div class="loader-text">
+      <strong>Creating teams...</strong>
+      <span>Finding the perfect match</span>
+    </div>
+
+    <div class="loader-dots">
+      <i></i>
+      <i></i>
+      <i></i>
+    </div>
+  </div>
+</div>
 </main>
