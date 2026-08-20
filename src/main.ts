@@ -25,14 +25,15 @@ export class AppComponent {
   error = '';
 
   constructor() {
-    ['Vicky','Prasobetan','Appidi','Abhi','Ansil','Deepthan','Manikutan','Nandu','Kuttu'].forEach(n => this.addPlayer(n));
+    ['Vicky', 'Prasobetan', 'Appidi', 'Abhi', 'Ansil', 'Deepthan', 'Manikutan', 'Nandu', 'Kuttu'].forEach(n => this.addPlayer(n));
   }
 
   get pairCount() { return this.pairs.length; }
   get requiredPairCount() { return this.players.length / 2; }
   get allPlayersPaired() { return this.players.length > 0 && this.players.length % 2 === 0 && this.pairs.length === this.requiredPairCount; }
-  get canGenerate() { return this.allPlayersPaired; }
-  get unpairedPlayers() {
+  get canGenerate() {
+    return this.players.length >= 2;
+  } get unpairedPlayers() {
     const used = new Set(this.pairs.flatMap(p => [p.a, p.b]));
     return this.players.filter(p => !used.has(p.id));
   }
@@ -42,7 +43,7 @@ export class AppComponent {
     if (!clean) return;
     if (this.players.some(p => p.name.toLowerCase() === clean.toLowerCase())) { this.error = 'That player is already added.'; return; }
     const id = this.players.length ? Math.max(...this.players.map(p => p.id)) + 1 : 1;
-    this.players.push({ id, name: clean, initials: clean.split(/\s+/).map(x => x[0]).join('').slice(0,2).toUpperCase() });
+    this.players.push({ id, name: clean, initials: clean.split(/\s+/).map(x => x[0]).join('').slice(0, 2).toUpperCase() });
     this.newPlayer = '';
     this.error = '';
   }
@@ -61,7 +62,7 @@ export class AppComponent {
     if (this.pairs.some(p => p.a === this.selectedA || p.b === this.selectedA || p.a === this.selectedB || p.b === this.selectedB)) {
       this.error = 'One of these players is already paired.'; return;
     }
-    this.pairs.push({a: this.selectedA, b: this.selectedB});
+    this.pairs.push({ a: this.selectedA, b: this.selectedB });
     this.selectedA = this.selectedB = null;
     this.resetTeams();
   }
@@ -75,28 +76,79 @@ export class AppComponent {
 
   generate() {
     this.error = '';
-    if (this.players.length < 2 || this.players.length % 2 !== 0) {
-      this.error = 'Use an even number of players to generate two equal teams.'; return;
-    }
-    if (!this.allPlayersPaired) {
-      this.error = `Pair all players before generating teams. You have ${this.pairCount} of ${this.requiredPairCount} pairs.`;
+
+    if (this.players.length < 2) {
+      this.error = 'Add at least 2 players.';
       return;
     }
-    const half = this.players.length / 2;
-    let bestA: Player[] | null = null;
-    for (let attempt = 0; attempt < 500; attempt++) {
-      const shuffled = [...this.players].sort(() => Math.random() - 0.5);
-      const a = shuffled.slice(0, half);
-      const ids = new Set(a.map(p => p.id));
-      if (this.pairs.every(pair => ids.has(pair.a) !== ids.has(pair.b))) { bestA = a; break; }
+
+    const teamA: Player[] = [];
+    const teamB: Player[] = [];
+
+    // Track players who are already part of a pair
+    const pairedPlayerIds = new Set<number>();
+
+    // 1. Randomly split every pair
+    for (const pair of this.pairs) {
+      const playerA = this.player(pair.a);
+      const playerB = this.player(pair.b);
+
+      pairedPlayerIds.add(pair.a);
+      pairedPlayerIds.add(pair.b);
+
+      // Randomly decide which player goes to which team
+      if (Math.random() < 0.5) {
+        teamA.push(playerA);
+        teamB.push(playerB);
+      } else {
+        teamA.push(playerB);
+        teamB.push(playerA);
+      }
     }
-    if (!bestA) {
-      this.error = 'No valid team split was found. Try removing or changing a pair.';
-      return;
+
+    // 2. Find players who don't have a pair
+    const unpairedPlayers = this.players.filter(
+      player => !pairedPlayerIds.has(player.id)
+    );
+
+    // 3. Randomize unpaired players
+    const shuffledUnpaired = [...unpairedPlayers].sort(
+      () => Math.random() - 0.5
+    );
+
+    // 4. Randomly decide which team gets the extra player
+    //    when the total number of players is odd.
+    const extraPlayerToTeamA =
+      this.players.length % 2 === 1
+        ? Math.random() < 0.5
+        : true;
+
+    // Target sizes
+    const totalPlayers = this.players.length;
+    const teamASize = Math.floor(totalPlayers / 2) +
+      (totalPlayers % 2 === 1 && extraPlayerToTeamA ? 1 : 0);
+
+    const teamBSize = totalPlayers - teamASize;
+
+    // 5. Randomly distribute unpaired players
+    for (const player of shuffledUnpaired) {
+      if (teamA.length < teamASize && teamB.length < teamBSize) {
+        // Both teams have room, randomly choose
+        if (Math.random() < 0.5) {
+          teamA.push(player);
+        } else {
+          teamB.push(player);
+        }
+      } else if (teamA.length < teamASize) {
+        teamA.push(player);
+      } else {
+        teamB.push(player);
+      }
     }
-    const ids = new Set(bestA.map(p => p.id));
-    this.teamA = bestA;
-    this.teamB = this.players.filter(p => !ids.has(p.id));
+
+    // 6. Final assignment
+    this.teamA = teamA;
+    this.teamB = teamB;
     this.generated = true;
   }
 
