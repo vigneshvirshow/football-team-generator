@@ -107,6 +107,28 @@ export class AppComponent {
     }, 1000);
   }
 
+  openDropdown: 'a' | 'b' | null = null;
+
+toggleDropdown(dropdown: 'a' | 'b') {
+  this.openDropdown =
+    this.openDropdown === dropdown
+      ? null
+      : dropdown;
+}
+
+selectPlayer(
+  dropdown: 'a' | 'b',
+  playerId: number
+) {
+  if (dropdown === 'a') {
+    this.selectedA = playerId;
+  } else {
+    this.selectedB = playerId;
+  }
+
+  this.openDropdown = null;
+}
+
   private generateTeams() {
     const teamA: Player[] = [];
     const teamB: Player[] = [];

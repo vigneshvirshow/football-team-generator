@@ -45,21 +45,127 @@
         </div><span class="count">{{ pairCount }} / {{ requiredPairCount }}</span>
       </div>
       <div class="pair-form">
-        <select [(ngModel)]="selectedA">
-          <option [ngValue]="null">Select player</option>
+        <div class="player-select">
+          <button type="button" class="player-select-trigger" [class.active]="openDropdown === 'a'"
+            (click)="toggleDropdown('a')">
 
-          <option *ngFor="let p of availablePlayersForFirstDropdown" [ngValue]="p.id">
-            {{ p.name }}
-          </option>
-        </select>
+            <ng-container *ngIf="selectedA !== null; else selectPlayerA">
+              <span class="selected-player">
+                <span class="select-avatar">
+                  {{ player(selectedA).initials }}
+                </span>
+
+                <span class="selected-info">
+                  <strong>{{ player(selectedA).name }}</strong>
+                  <small>Player</small>
+                </span>
+              </span>
+            </ng-container>
+
+            <ng-template #selectPlayerA>
+              <span class="placeholder">
+                <span class="placeholder-icon">+</span>
+                <span>
+                  <strong>Select player</strong>
+                </span>
+              </span>
+            </ng-template>
+
+            <span class="chevron">⌄</span>
+          </button>
+
+          <div class="player-dropdown" *ngIf="openDropdown === 'a'">
+
+            <div class="dropdown-header">
+              <span>SELECT PLAYER</span>
+              <small>{{ availablePlayersForFirstDropdown.length }} available</small>
+            </div>
+
+            <button type="button" class="player-option" *ngFor="let p of availablePlayersForFirstDropdown"
+              (click)="selectPlayer('a', p.id)">
+
+              <span class="select-avatar">
+                {{ p.initials }}
+              </span>
+
+              <span class="option-info">
+                <strong>{{ p.name }}</strong>
+                <small>Available</small>
+              </span>
+
+              <span class="option-check" *ngIf="selectedA === p.id">
+                ✓
+              </span>
+            </button>
+
+            <div class="dropdown-empty" *ngIf="!availablePlayersForFirstDropdown.length">
+              No players available
+            </div>
+          </div>
+        </div>
+
         <span class="versus">VS</span>
-        <select [(ngModel)]="selectedB">
-          <option [ngValue]="null">Select player</option>
 
-          <option *ngFor="let p of availablePlayersForSecondDropdown" [ngValue]="p.id">
-            {{ p.name }}
-          </option>
-        </select> <button class="primary" (click)="createPair()">Pair them</button>
+        <div class="player-select">
+          <button type="button" class="player-select-trigger" [class.active]="openDropdown === 'b'"
+            (click)="toggleDropdown('b')">
+
+            <ng-container *ngIf="selectedB !== null; else selectPlayerB">
+              <span class="selected-player">
+                <span class="select-avatar orange">
+                  {{ player(selectedB).initials }}
+                </span>
+
+                <span class="selected-info">
+                  <strong>{{ player(selectedB).name }}</strong>
+                  <small>Player</small>
+                </span>
+              </span>
+            </ng-container>
+
+            <ng-template #selectPlayerB>
+              <span class="placeholder">
+                <span class="placeholder-icon">+</span>
+                <span>
+                  <strong>Opposite player</strong>
+                </span>
+              </span>
+            </ng-template>
+
+            <span class="chevron">⌄</span>
+          </button>
+
+          <div class="player-dropdown" *ngIf="openDropdown === 'b'">
+
+            <div class="dropdown-header">
+              <span>SELECT PLAYER</span>
+              <small>{{ availablePlayersForSecondDropdown.length }} available</small>
+            </div>
+
+            <button type="button" class="player-option" *ngFor="let p of availablePlayersForSecondDropdown"
+              (click)="selectPlayer('b', p.id)">
+
+              <span class="select-avatar orange">
+                {{ p.initials }}
+              </span>
+
+              <span class="option-info">
+                <strong>{{ p.name }}</strong>
+                <small>Available</small>
+              </span>
+
+              <span class="option-check" *ngIf="selectedB === p.id">
+                ✓
+              </span>
+            </button>
+
+            <div class="dropdown-empty" *ngIf="!availablePlayersForSecondDropdown.length">
+              No players available
+            </div>
+          </div>
+        </div>
+        <span class="versus">VS</span>
+        <button class="primary" (click)="createPair()">Pair</button>
       </div>
       <div class="pairs-list">
         <div class="pair" *ngFor="let pair of pairs">
@@ -126,19 +232,19 @@
   <footer><span>MatchUp</span> • Make every friendly match more fun.</footer>
 
   <div class="generation-overlay" *ngIf="isGenerating">
-  <div class="football-loader">
-    <div class="football">⚽</div>
+    <div class="football-loader">
+      <div class="football">⚽</div>
 
-    <div class="loader-text">
-      <strong>Creating teams...</strong>
-      <span>Finding the perfect match</span>
-    </div>
+      <div class="loader-text">
+        <strong>Creating teams...</strong>
+        <span>Finding the perfect match</span>
+      </div>
 
-    <div class="loader-dots">
-      <i></i>
-      <i></i>
-      <i></i>
+      <div class="loader-dots">
+        <i></i>
+        <i></i>
+        <i></i>
+      </div>
     </div>
   </div>
-</div>
 </main>
