@@ -37,8 +37,9 @@ export class AppComponent {
   resultsHead?: ElementRef<HTMLElement>;
 
   get pairCount() { return this.pairs.length; }
-  get requiredPairCount() { return this.players.length / 2; }
-  get allPlayersPaired() { return this.players.length > 0 && this.players.length % 2 === 0 && this.pairs.length === this.requiredPairCount; }
+get requiredPairCount(): number {
+  return Math.floor(this.players.length / 2);
+}  get allPlayersPaired() { return this.players.length > 0 && this.players.length % 2 === 0 && this.pairs.length === this.requiredPairCount; }
   get canGenerate() {
     return this.players.length >= 2;
   } get unpairedPlayers() {

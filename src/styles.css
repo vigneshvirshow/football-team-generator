@@ -716,13 +716,13 @@ button:active {
 
   flex-direction: column;
 
-  gap: 7px;
+  gap: 8px;
 
-  max-height: 285px;
+  max-height: 320px;
 
   overflow-y: auto;
 
-  padding-right: 3px;
+  padding-right: 4px;
 }
 
 /* Custom scrollbar */
@@ -740,7 +740,6 @@ button:active {
 }
 
 .player,
-.pair,
 .team-player {
   display: flex;
 
@@ -763,6 +762,42 @@ button:active {
     background 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
+}
+
+/* =========================================================
+   Pair Row
+   ========================================================= */
+
+.pair {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  width: 100%;
+  min-width: 0;
+
+  /* Reserve room for the remove button on the right. */
+  padding: 12px 50px 12px 12px;
+
+  border: 1px solid transparent;
+
+  border-radius: 15px;
+
+  background: rgba(247, 249, 247, 0.8);
+
+  animation: itemEnter 0.35s ease both;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  overflow: hidden;
 }
 
 .player:hover,
@@ -860,19 +895,74 @@ button:active {
 }
 
 /* =========================================================
+   Pair-specific sizing
+   ========================================================= */
+
+.pair .avatar {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  border-radius: 12px;
+}
+
+.pair .icon-btn {
+  position: absolute;
+
+  top: 50%;
+  right: 10px;
+
+  width: 32px;
+  height: 32px;
+
+  margin: 0;
+
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 auto;
+
+  transform: translateY(-50%);
+}
+
+/* =========================================================
    Pair
    ========================================================= */
 
 .pair strong {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
   font-size: 13px;
+
+  font-weight: 700;
+
+  color: var(--ink);
 }
 
 .pair b {
-  margin: 0 5px;
+  width: 28px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
 
   color: #96a49d;
 
   font-size: 14px;
+
+  font-weight: 500;
+
+  flex-shrink: 0;
 }
 
 /* =========================================================
@@ -1584,6 +1674,46 @@ footer span {
    ========================================================= */
 
 @media (max-width: 800px) {
+  /* Pair row remains single-line on tablets */
+  .pair {
+    gap: 7px;
+
+    padding: 11px 44px 11px 11px;
+  }
+
+  .pair .avatar {
+    width: 40px;
+    height: 40px;
+
+    flex-basis: 40px;
+  }
+
+  .pair strong {
+    min-width: 0;
+
+    flex: 1 1 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+  }
+
+  .pair b {
+    width: 26px;
+
+    flex-basis: 26px;
+  }
+
+  .pair .icon-btn {
+    width: 30px;
+    height: 30px;
+  }
+
+
+
+
   .shell {
     padding: 18px 15px 45px;
   }
@@ -1743,19 +1873,61 @@ footer span {
   .pair-form button {
     grid-column: auto;
   }
-
   .pair {
-    flex-wrap: wrap;
+    gap: 6px;
+
+    padding: 10px 40px 10px 10px;
+
+    overflow: hidden;
+  }
+
+  .pair .avatar {
+    width: 36px;
+    height: 36px;
+
+    flex: 0 0 36px;
+
+    border-radius: 10px;
+
+    font-size: 9px;
   }
 
   .pair strong {
-    max-width: 80px;
+    min-width: 0;
+
+    flex: 1 1 0;
 
     overflow: hidden;
 
     text-overflow: ellipsis;
 
     white-space: nowrap;
+
+    font-size: 12px;
+  }
+
+  .pair b {
+    width: 22px;
+
+    flex: 0 0 22px;
+
+    font-size: 12px;
+  }
+
+  .pair .icon-btn {
+    position: absolute;
+
+    top: 50%;
+    right: 8px;
+
+    width: 28px;
+    height: 28px;
+
+    margin: 0;
+
+    transform: translateY(-50%);
+
+    font-size: 18px;
   }
 
   .results-head {
@@ -2471,4 +2643,62 @@ footer span {
   .player-dropdown {
     max-height: 250px;
   }
+}
+
+/* =========================================================
+   Pair Layout Safety
+   ========================================================= */
+
+.pair,
+.pair > * {
+  min-width: 0;
+}
+
+.pair strong {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+
+/* =========================================================
+   Pair Content Alignment
+   ========================================================= */
+
+.pair > strong {
+  min-width: 0;
+
+  flex: 1 1 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.pair > b {
+  flex: 0 0 28px;
+
+  width: 28px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+
+  color: #96a49d;
+
+  font-size: 14px;
+
+  font-weight: 500;
+}
+
+.pair > .avatar {
+  flex: 0 0 42px;
+}
+
+.pair .icon-btn:hover {
+  transform: translateY(-50%) rotate(90deg);
 }
