@@ -1746,7 +1746,6 @@ footer span {
 
   .pair {
     flex-wrap: wrap;
-    width: max-content;
   }
 
   .pair strong {
