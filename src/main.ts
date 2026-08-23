@@ -30,7 +30,7 @@ export class AppComponent {
   isGenerating = false;
 
   constructor() {
-    ['Vicky', 'Prasobetan', 'Appidi', 'Abhi', 'Ansil', 'Deepthan', 'Manikutan', 'Nandu', 'Kuttu','Joppuz','Pandi','Big pandi, 'Small pandi'].forEach(n => this.addPlayer(n));
+    ['Vicky', 'Prasobetan', 'Appidi', 'Abhi', 'Ansil', 'Deepthan', 'Manikutan', 'Nandu', 'Kuttu','Joppuz','Pandi','Big pandi', 'Small pandi'].forEach(n => this.addPlayer(n));
   }
 
   @ViewChild('resultsHead')
