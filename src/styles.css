@@ -772,10 +772,13 @@ button:active {
   position: relative;
   display: grid;
 
+  /* 6 columns: avatar A | name A | VS | avatar B | name B | remove */
+
   grid-template-columns:
     36px
     minmax(0, 1fr)
     22px
+    36px
     minmax(0, 1fr)
     28px;
 
@@ -2711,19 +2714,49 @@ body {
   box-sizing: border-box;
 }
 
+
+
+/* Pair six-column child sizing */
+
+.pair > .avatar {
+  min-width: 0;
+}
+
+.pair > strong {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pair > b {
+  min-width: 0;
+}
+
+.pair > .icon-btn {
+  min-width: 28px;
+  max-width: 28px;
+}
+
+
+
 @media (max-width: 480px) {
   .pair {
     grid-template-columns:
       36px
       minmax(0, 1fr)
       22px
+      36px
       minmax(0, 1fr)
       28px;
 
     gap: 6px;
+
     width: 100%;
     max-width: 100%;
     min-width: 0;
+
     padding: 10px;
   }
 
@@ -2747,6 +2780,7 @@ body {
     width: 28px;
     height: 28px;
     min-width: 28px;
+    max-width: 28px;
     font-size: 18px;
   }
 }
