@@ -19,7 +19,7 @@
   <section *ngIf="!generated" class="grid">
     <article class="card players-card">
       <div class="card-head">
-        <div><span class="step">01</span>
+        <div>
           <h2>Players</h2>
           <p>Add everyone joining the match.</p>
         </div><span class="count">{{ players.length }}</span>
@@ -39,10 +39,10 @@
 
     <article class="card pairs-card">
       <div class="card-head">
-        <div><span class="step">02</span>
+        <div>
           <h2>Keep apart</h2>
           <p>Pair everyone. Each pair will be split across the two teams.</p>
-        </div><span class="count">{{ pairCount }} / {{ requiredPairCount }}</span>
+        </div>
       </div>
       <div class="pair-form">
         <div class="player-select">
