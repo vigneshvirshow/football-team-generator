@@ -195,9 +195,9 @@
     </button>
   </section>
 
-  <section class="results" *ngIf="generated">
-    <div class="results-head" #resultsHead>
-      <div><span class="eyebrow">MATCH DAY</span>
+  <section #resultsHead class="results" *ngIf="generated">
+    <div class="results-head">
+      <div>
         <h2>Your teams are ready.</h2>
       </div>
       <button class="secondary" (click)="generate()">↻ Regenerate</button>
