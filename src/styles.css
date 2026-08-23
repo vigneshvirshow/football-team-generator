@@ -765,29 +765,36 @@ button:active {
 }
 
 /* =========================================================
-   Pair Row
+   PAIR ROW - FINAL RESPONSIVE VERSION
    ========================================================= */
 
 .pair {
   position: relative;
+  display: grid;
 
-  display: flex;
+  grid-template-columns:
+    36px
+    minmax(0, 1fr)
+    22px
+    minmax(0, 1fr)
+    28px;
 
   align-items: center;
-
-  gap: 8px;
+  gap: 6px;
 
   width: 100%;
+  max-width: 100%;
   min-width: 0;
+  box-sizing: border-box;
 
-  /* Reserve room for the remove button on the right. */
-  padding: 12px 50px 12px 12px;
+  padding: 10px;
 
   border: 1px solid transparent;
-
   border-radius: 15px;
 
   background: rgba(247, 249, 247, 0.8);
+
+  overflow: hidden;
 
   animation: itemEnter 0.35s ease both;
 
@@ -796,8 +803,6 @@ button:active {
     background 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
-
-  overflow: hidden;
 }
 
 .player:hover,
@@ -899,31 +904,39 @@ button:active {
    ========================================================= */
 
 .pair .avatar {
-  width: 42px;
-  height: 42px;
-
-  flex-shrink: 0;
-
-  border-radius: 12px;
+  width: 36px;
+  height: 36px;
+  min-width: 0;
+  flex: none;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  font-size: 10px;
 }
 
 .pair .icon-btn {
-  position: absolute;
+  position: static;
 
-  top: 50%;
-  right: 10px;
-
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
 
   margin: 0;
+  padding: 0;
 
   display: grid;
   place-items: center;
+  justify-self: end;
 
-  flex: 0 0 auto;
+  border: 0;
+  border-radius: 8px;
 
-  transform: translateY(-50%);
+  font-size: 18px;
+  line-height: 1;
+
+  transform: none;
+  flex: none;
 }
 
 /* =========================================================
@@ -931,38 +944,36 @@ button:active {
    ========================================================= */
 
 .pair strong {
+  display: block;
+  width: 100%;
   min-width: 0;
+  max-width: 100%;
 
   overflow: hidden;
-
   text-overflow: ellipsis;
-
   white-space: nowrap;
 
-  font-size: 13px;
+  word-break: normal;
+  overflow-wrap: normal;
 
+  font-size: 12px;
   font-weight: 700;
-
-  color: var(--ink);
+  line-height: 1.2;
 }
 
 .pair b {
-  width: 28px;
+  width: 22px;
+  min-width: 22px;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
   margin: 0;
 
-  color: #96a49d;
-
-  font-size: 14px;
-
+  font-size: 12px;
   font-weight: 500;
-
-  flex-shrink: 0;
+  color: #96a49d;
 }
 
 /* =========================================================
@@ -1674,42 +1685,7 @@ footer span {
    ========================================================= */
 
 @media (max-width: 800px) {
-  /* Pair row remains single-line on tablets */
-  .pair {
-    gap: 7px;
 
-    padding: 11px 44px 11px 11px;
-  }
-
-  .pair .avatar {
-    width: 40px;
-    height: 40px;
-
-    flex-basis: 40px;
-  }
-
-  .pair strong {
-    min-width: 0;
-
-    flex: 1 1 0;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-  }
-
-  .pair b {
-    width: 26px;
-
-    flex-basis: 26px;
-  }
-
-  .pair .icon-btn {
-    width: 30px;
-    height: 30px;
-  }
 
 
 
@@ -2701,4 +2677,76 @@ footer span {
 
 .pair .icon-btn:hover {
   transform: translateY(-50%) rotate(90deg);
+}
+
+
+/* =========================================================
+   MOBILE HORIZONTAL OVERFLOW PROTECTION
+   ========================================================= */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.pairs-card {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.pairs-list {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.pairs-list > * {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .pair {
+    grid-template-columns:
+      36px
+      minmax(0, 1fr)
+      22px
+      minmax(0, 1fr)
+      28px;
+
+    gap: 6px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 10px;
+  }
+
+  .pair .avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .pair strong {
+    min-width: 0;
+    max-width: 100%;
+    font-size: 12px;
+  }
+
+  .pair b {
+    width: 22px;
+    min-width: 22px;
+  }
+
+  .pair .icon-btn {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    font-size: 18px;
+  }
 }
